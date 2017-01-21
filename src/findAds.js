@@ -1,10 +1,3 @@
-//find image tags with a tag children
-//find a tags with image children
-//find all iframes and verify that they are adds(maybe a tags)
-//concat img and iframes
-//map and to get sizes and positions in an object
-//filter by size
-//try and verify false positives?
 const adSizes = [
     { width: 300, height: 250 },
     { width: 320, height: 260 },
@@ -39,9 +32,6 @@ const findiFrames = () => {
 
 const convertTagsToSizeObjects = (tags) => {
     return tags.map((node) => {
-        // if (node.tagName === "A") {
-        //   //get parent img 
-        // }
         return {
             width: node.clientWidth,
             height: node.clientHeight,
@@ -51,6 +41,10 @@ const convertTagsToSizeObjects = (tags) => {
             },
         };
     });
+};
+
+const isNotHidden = (node) => {
+    return !(node.offsetParent === null);
 };
 
 const containedInAdSizeArray = (x, y) => {
@@ -69,7 +63,8 @@ function findAds() {
     const imgTags = findTags("img > a");
     const iframes = findiFrames();
     const allTags = aTags.concat(imgTags).concat(iframes);
-    const sizeObjects = convertTagsToSizeObjects(allTags);
+    const nonHiddenTags = allTags.filter(isNotHidden);
+    const sizeObjects = convertTagsToSizeObjects(nonHiddenTags);
     const sizeFilteredObjects = sizeObjects.filter(adSizeFilter);
     const adObject = {
         location,
