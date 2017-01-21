@@ -29,21 +29,19 @@ const adSizes = [
     { width: 120, height: 600 },
 ];
 
-const findATags = () => { 
-    return Array.from(document.querySelectorAll("a > img"));
+const findTags = (selector) => { 
+    return Array.from(document.querySelectorAll(selector));
 };
-const findImgTags = () => { 
-    return Array.from(document.querySelectorAll("img > a"));
-};
+
 const findiFrames = () => {
     return $('iframe').get();
 };
 
 const convertTagsToSizeObjects = (tags) => {
     return tags.map((node) => {
-        if (node.tagName === "A") {
-          //get parent img 
-        }
+        // if (node.tagName === "A") {
+        //   //get parent img 
+        // }
         return {
             width: node.clientWidth,
             height: node.clientHeight,
@@ -67,13 +65,17 @@ const adSizeFilter = (node) => {
 
 function findAds() { 
     const location = window.location.href;
-    const aTags = findATags();
-    const imgTags = findImgTags();
+    const aTags = findTags("a > img");
+    const imgTags = findTags("img > a");
     const iframes = findiFrames();
     const allTags = aTags.concat(imgTags).concat(iframes);
     const sizeObjects = convertTagsToSizeObjects(allTags);
     const sizeFilteredObjects = sizeObjects.filter(adSizeFilter);
-    console.log("sizeFilteredObjects", sizeFilteredObjects);
+    const adObject = {
+        location,
+        advertisements: sizeFilteredObjects,
+    };
+    console.log(JSON.stringify(adObject));
 }
 
 findAds();
