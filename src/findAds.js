@@ -58,7 +58,7 @@ const convertTagsToSizeObjects = (tags) => {
 const containedInAdSizeArray = (x, y) => {
     return adSizes.some((obj) => {
         return (obj.width === x && obj.height === y);
-    })
+    });
 };
 
 const adSizeFilter = (node) => {
@@ -66,6 +66,7 @@ const adSizeFilter = (node) => {
 };
 
 function findAds() { 
+    const location = window.location.href;
     const aTags = findATags();
     const imgTags = findImgTags();
     const iframes = findiFrames();
