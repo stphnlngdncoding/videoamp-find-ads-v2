@@ -30,17 +30,15 @@ const findiFrames = () => {
     return $('iframe').get();
 };
 
-const convertTagsToSizeObjects = (tags) => {
-    return tags.map((node) => {
-        return {
-            width: node.clientWidth,
-            height: node.clientHeight,
-            position: {
-                x: node.offsetLeft,
-                y: node.offsetTop,
-            },
-        };
-    });
+const convertTagsToSizeObjects = (node) => {
+    return {
+        width: node.clientWidth,
+        height: node.clientHeight,
+        position: {
+            x: node.offsetLeft,
+            y: node.offsetTop,
+        },
+    };
 };
 
 const isNotHidden = (node) => {
@@ -62,13 +60,15 @@ function findAds() {
     const aTags = findTags("a > img");
     const imgTags = findTags("img > a");
     const iframes = findiFrames();
-    const allTags = aTags.concat(imgTags).concat(iframes);
-    const nonHiddenTags = allTags.filter(isNotHidden);
-    const sizeObjects = convertTagsToSizeObjects(nonHiddenTags);
-    const sizeFilteredObjects = sizeObjects.filter(adSizeFilter);
+    const filteredSizeObjects = aTags
+      .concat(imgTags)
+      .concat(iframes)
+      .filter(isNotHidden)
+      .map(convertTagsToSizeObjects)
+      .filter(adSizeFilter);
     const adObject = {
         location,
-        advertisements: sizeFilteredObjects,
+        advertisements: filteredSizeObjects,
     };
     console.log(JSON.stringify(adObject));
 }
